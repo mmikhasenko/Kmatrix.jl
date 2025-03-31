@@ -5,6 +5,7 @@ version = "0.1.0"
 
 [deps]
 HadronicLineshapes = "49c9d978-1f9d-4e96-a984-0a9783c0b9bf"
+Interpolations = "a98d9a8b-a2ab-59e6-89dd-64a1c18fca59"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 Parameters = "d96e819e-fc66-5662-9728-84c9c7592b0a"
 QuadGK = "1fd47b50-473d-5c70-9696-f719f8f3bcdc"
@@ -12,6 +13,7 @@ StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 
 [compat]
 HadronicLineshapes = "0.4.1"
+Interpolations = "0.15.1"
 LinearAlgebra = "1.11.0"
 Parameters = "0.12.3"
 QuadGK = "2.11.2"

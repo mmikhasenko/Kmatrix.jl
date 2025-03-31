@@ -12,7 +12,7 @@ function interpolatedChannel(ch, ch_approx;
     mv = range(thr, m_grid_max, n_grid)
     rv = ratio.(mv)
     inter = interpolate((mv,), rv, Gridded(Linear()))
-    interpolateChannel(ch, inter, ch_approx)
+    interpolatedChannel(ch, inter, ch_approx)
 end
 
 function real_ρ(ch::interpolatedChannel, m::Real)
@@ -36,6 +36,6 @@ function iρ(
     ch::interpolatedChannel{<:QuasiTwoBodyChannelBW}, m::Complex)
     ml = nominal_threshold(ch.full)
     f = ch.inter(ml)
-    _iρ0 = real(_iρ(ch, ml + iϵ))
+    _iρ0 = real(_iρ(ch, ml + 1e-7im))
     _iρ(ch, m) - _iρ0
 end

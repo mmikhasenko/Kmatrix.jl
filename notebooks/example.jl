@@ -10,12 +10,12 @@ begin
 	Pkg.activate(joinpath(@__DIR__))
 	Pkg.instantiate()
 	# 
-	using KMatrix
 	using HadronicLineshapes
+	using Interpolations
 	using Parameters
+	using KMatrix
 	using QuadGK
 	using Plots
-	using Interpolations
 end
 
 # ╔═╡ 2184fd62-8a98-4db6-afc2-9387d67e70e8

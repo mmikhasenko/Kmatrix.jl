@@ -1,9 +1,10 @@
 module KMatrix
 
+using HadronicLineshapes
+using Interpolations
 using LinearAlgebra
 using StaticArrays
 using Parameters
-using HadronicLineshapes
 using QuadGK
 
 export TwoBodyChannel, iρ

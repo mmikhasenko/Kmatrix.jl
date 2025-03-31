@@ -396,7 +396,7 @@ uuid = "692b3bcd-3c85-4b1f-b108-f13ce0eb3210"
 version = "1.7.0"
 
 [[deps.KMatrix]]
-deps = ["HadronicLineshapes", "LinearAlgebra", "Parameters", "StaticArrays"]
+deps = ["HadronicLineshapes", "Interpolations", "LinearAlgebra", "Parameters", "QuadGK", "StaticArrays"]
 path = ".."
 uuid = "dbb8acb7-2292-4e86-9e45-2a3a36745847"
 version = "0.1.0"
