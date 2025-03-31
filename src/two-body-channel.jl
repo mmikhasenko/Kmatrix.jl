@@ -16,6 +16,8 @@ end
 
 TwoBodyChannel(m1, m2; L::Int = 0) = TwoBodyChannel(m1, m2, L)
 
+threshold(ch::TwoBodyChannel) = real(ch.m1 + ch.m2)
+
 """
     ρ(ch::TwoBodyChannel, m; ϕ=-π/2)
 
@@ -32,8 +34,9 @@ through the phase rotation parameter `ϕ`.
 # Returns
 Phase space value ρ(m) for the given channel and mass
 """
-function ρ(ch::TwoBodyChannel, m; ϕ = -π / 2)
+function iρ(ch::TwoBodyChannel, m; ϕ = -π / 2)
     ch.L != 0 && error("not implemented")
+    1im *
     sqrt(cis(ϕ) * (m - (ch.m1 + ch.m2))) * cis(-ϕ / 2) *
     sqrt(m + (ch.m1 + ch.m2)) *
     sqrt((m^2 - (ch.m1 - ch.m2)^2)) /

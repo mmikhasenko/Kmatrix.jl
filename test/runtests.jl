@@ -1,6 +1,6 @@
 using KMatrix
 using Test
-using StaticArrays
+using KMatrix.StaticArrays
 
 
 @testset "TwoBodyChannel" begin
@@ -11,12 +11,12 @@ using StaticArrays
 
     # Test phase space calculation
     m = 3.0
-    ρval = ρ(ch, m)
-    @test ρval isa Complex
-    @test abs(ρval) > 0
+    iρval = iρ(ch, m)
+    @test iρval isa Complex
+    @test abs(iρval) > 0
 
     # Test below threshold
-    @test real(ρ(ch, 1.0)) ≈ 0 atol = 1e-10
+    @test imag(iρ(ch, 1.0)) ≈ 0 atol = 1e-10
 end
 
 @testset "3x3 one-pole K-matrix" begin
@@ -84,7 +84,8 @@ end
     @test length(amp) == 1
 
     # Test individual pole contributions
-    amp1 = productionpole(A_custom, m, 1)
-    amp2 = productionpole(A_custom, m, 2)
-    @test abs(amp[1] - (amp1[1] + amp2[1])) < 1e-10
+    amp1 = production_pole(A_custom, m, 1)
+    amp2 = production_pole(A_custom, m, 2)
+    @test amp1 ≈ [-0.3068709069551295 + 0.06943242478375794im]
+    @test amp2 ≈ [0.2807585353071957 + 0.17715198048327294im]
 end

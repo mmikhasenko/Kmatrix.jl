@@ -1,0 +1,5 @@
+[deps]
+ApproxFun = "28f2ccd6-bb30-5033-b560-165f7b14dc2f"
+HadronicLineshapes = "49c9d978-1f9d-4e96-a984-0a9783c0b9bf"
+Interpolations = "a98d9a8b-a2ab-59e6-89dd-64a1c18fca59"
+KMatrix = "dbb8acb7-2292-4e86-9e45-2a3a36745847"

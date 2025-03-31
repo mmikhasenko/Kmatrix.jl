@@ -56,7 +56,7 @@ Used in the T-matrix construction T = D⁻¹K.
 """
 function Dmatrix(T::Tmatrix{N, V}, m; ϕ = -π / 2) where {N, V}
     𝕀 = Matrix(I, (N, N))
-    iρv = 1im .* ρ.(T.channels, m; ϕ) .* 𝕀
+    iρv = iρ.(T.channels, m; ϕ) .* 𝕀
     K = amplitude(T.K, m)
     D = 𝕀 - K * iρv
 end

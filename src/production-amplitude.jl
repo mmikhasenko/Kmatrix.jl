@@ -46,12 +46,12 @@ function amplitude(A::ProductionAmplitude, m; ϕ = -π / 2)
 end
 
 """
-    productionpole(A::ProductionAmplitude, m, iR::Int; ϕ=-π/2)
+    production_pole(A::ProductionAmplitude, m, iR::Int; ϕ=-π/2)
 
 Calculate production amplitude contribution from only the `iR`-th pole.
 Useful for studying individual resonance contributions.
 """
-function productionpole(A::ProductionAmplitude{N, V}, m, iR::Int; ϕ = -π / 2) where {N, V}
+function production_pole(A::ProductionAmplitude{N, V}, m, iR::Int; ϕ = -π / 2) where {N, V}
     αnonpoles = SVector{N}(zeros(N))
     αpoles = zeros(Complex{Float64}, V)
     αpoles[iR] = A.αpoles[iR]
@@ -60,11 +60,11 @@ function productionpole(A::ProductionAmplitude{N, V}, m, iR::Int; ϕ = -π / 2) 
 end
 
 """
-    productionnonpole(A::ProductionAmplitude, m; ϕ=-π/2)
+    production_nonpole(A::ProductionAmplitude, m; ϕ=-π/2)
 
 Calculate production amplitude contribution from only non-pole terms.
 """
-function productionnonpole(A::ProductionAmplitude{N, V}, m; ϕ = -π / 2) where {N, V}
+function production_nonpole(A::ProductionAmplitude{N, V}, m; ϕ = -π / 2) where {N, V}
     @unpack T, αnonpoles = A
     αpoles = SVector{V}(zeros(V))
     A = ProductionAmplitude(T, αpoles, αnonpoles)
