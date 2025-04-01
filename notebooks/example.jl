@@ -51,7 +51,7 @@ const BW_D2600 = BreitWigner(; m=m_D2600, Γ=Γ_D2600, ma=mD, mb=mπ, l=0, d=1.0
 ch_qtb = QuasiTwoBodyChannel(mD+0im, BW_D2600, ch_Dπ, 0, 1.0);
 
 # ╔═╡ 48234119-2887-476c-a159-4fedf388db16
-ch_qtb_approx = interpolatedChannel(ch_qtb, ch_ctb;
+ch_qtb_approx = InterpolatedChannel(ch_qtb, ch_ctb;
 			m_grid_max = 5.9,
 			n_grid = 100);
 
@@ -77,17 +77,20 @@ end
 # ╔═╡ 15fdb2e5-9892-4706-8f78-a5e47a553e4d
 let
 	plot(title="Phase space volume", xlab="m [GeV]", ylab="rho", leg=:left)
-	plot!(m->real(iρ(ch_qtb_approx, m+iϵ)), support..., lab="TB")
-	plot!(m->imag(iρ(ch_qtb_approx, m+iϵ)), support..., lab="CTB")
+	plot!(m->real(iρ(ch_qtb_approx, m+iϵ)), support..., lab="real")
+	plot!(m->imag(iρ(ch_qtb_approx, m+iϵ)), support..., lab="imag")
 end
 
 # ╔═╡ 92cb358f-499f-4bd4-ae7f-74e316d5ce13
 let
-	plot(title="Phase space volume", xlab="m [GeV]", ylab="rho", leg=:topleft)
-	plot!(m->real(iρ(ch_tb, m+iϵ)), support..., lab="\$\\Re\\,(i\\rho)\$")
+	plot(title="Phase space volume", xlab="m [GeV]", ylab="rho", leg=:bottom)
+	plot!(m->real(iρ(ch_tb, m+iϵ)), 0.7, 5.4, lab="\$\\Re\\,(i\\rho)\$")
 	# 
-	plot!(m->imag(iρ(ch_tb, m+iϵ)), support..., lab="\$\\Im\\,(i\\rho)\$")
+	plot!(m->imag(iρ(ch_tb, m+iϵ)), 0.7, 5.4, lab="\$\\Im\\,(i\\rho)\$")
 end
+
+# ╔═╡ c09c1d2e-44ac-4789-a406-f921a0121aca
+
 
 # ╔═╡ f3eeaaa5-591a-4731-8c97-ce54c6c0a438
 begin
@@ -95,7 +98,7 @@ begin
 		eff = exp(i)
 		BW_D2600 = BreitWigner(; m=m_D2600, Γ=Γ_D2600*eff, ma=mD, mb=mπ, l=0, d=1.0)
 		ch_qtb = QuasiTwoBodyChannel(mD+0im, BW_D2600, ch_Dπ, 0, 1.0);
-		ch_qtb_approx = interpolatedChannel(ch_qtb, ch_ctb;
+		ch_qtb_approx = InterpolatedChannel(ch_qtb, ch_ctb;
 					m_grid_max = 5.9,
 					n_grid = 200);
 		# 
@@ -124,4 +127,5 @@ end
 # ╠═8bdf9a7c-702b-46b6-b4ab-7c8c5eba3b3c
 # ╠═15fdb2e5-9892-4706-8f78-a5e47a553e4d
 # ╠═92cb358f-499f-4bd4-ae7f-74e316d5ce13
+# ╠═c09c1d2e-44ac-4789-a406-f921a0121aca
 # ╠═f3eeaaa5-591a-4731-8c97-ce54c6c0a438

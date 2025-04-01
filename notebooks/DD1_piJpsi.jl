@@ -11,12 +11,13 @@ begin
 	Pkg.activate(joinpath(@__DIR__))
 	Pkg.instantiate()
 	# 
+	using KMatrix.HadronicLineshapes
 	using KMatrix.StaticArrays
-	using HadronicLineshapes
+	using KMatrix.Parameters
+	using KMatrix.QuadGK
 	using Interpolations
-	using Parameters
+	using DelimitedFiles
 	using KMatrix
-	using QuadGK
 	using Plots
 end
 
@@ -66,10 +67,10 @@ const support = (mjψ+mπ, 5.5)
 const iϵ = 1e-7im
 
 # ╔═╡ 9336b016-0ed3-11f0-2871-0377facf61a3
-A = let
+A_approx = let
 	channels = SVector(
         TwoBodyChannel(mjψ, mπ),
-        TwoBodyChannel(mD, m_D2600 -1im*Γ_D2600/2) # -1im*Γ_D2600/2
+        TwoBodyChannel(mD, m_D2600-1im*Γ_D2600/2)
     )
     MG = [(M = 4.2, gs = [0.5, 4.4])]
     K = Kmatrix(MG)
@@ -78,7 +79,7 @@ A = let
 end
 
 # ╔═╡ 8916df22-2961-4bd1-87f4-b32fad7473f5
-A_approx = let
+A = let
 	ch_Dπ = TwoBodyChannel(mD, mπ)
 	ch_ctb = TwoBodyChannel(mD, m_D2600-0.5im*Γ_D2600)
 	# 
@@ -93,26 +94,44 @@ A_approx = let
         ch_qtb_approx
     )
 	ρ_ratio = channels[2].inter.coefs[end]
-	MG = [(M = A.T.K.poles[1].M, gs = A.T.K.poles[1].gs .* [1, 1/sqrt(ρ_ratio)])]
+	MG = [(M = A_approx.T.K.poles[1].M, gs = A_approx.T.K.poles[1].gs .* [1, 1/sqrt(ρ_ratio)])]
 	K = Kmatrix(MG)
     T = Tmatrix(K, channels)
 	ProductionAmplitude(T, SVector(1.0), SVector(0.0, 0.0))
 end
 
+# ╔═╡ 17a53e2b-af6e-4bc1-85b3-3bd2f2f27f0b
+md"""
+### Save look up tables to disc
+"""
+
+# ╔═╡ b119c99d-24d1-4699-9b50-97bc83e2d873
+let # in three columns
+	mv = range(support..., 100)
+	Av = iρ.(Ref(A_approx.T.channels[2]), mv)
+	data = [mv real.(Av) imag.(Av)]
+	writedlm("D1D_orho_reim.txt", data)
+end
+
+# ╔═╡ 2597c296-3e91-4123-9fbf-fb0581c2e60e
+md"""
+## Plot spectra
+"""
+
 # ╔═╡ bca30e9e-c23c-40e5-9a2a-15a885ef953e
 let
 	plot(title = "approximate parametrization in Flatte regime", xlab="m [GeV]", ylab="\$\\mathcal{A}\$")
-	plot!(m->abs2(amplitude(A, m)[1]), support...)
-	vline!([A.T.K.poles[1].M], lab="bare mass", alpha=0.3)
-	vline!([threshold(A.T.channels[2])], lab="nominal threshold")
+	plot!(m->abs2(amplitude(A_approx, m)[1]), support...)
+	vline!([A_approx.T.K.poles[1].M], lab="bare mass", alpha=0.3)
+	vline!([threshold(A_approx.T.channels[2])], lab="nominal threshold")
 end
 
 # ╔═╡ 7e64d6e4-2736-40e7-b7bf-262dfd89996f
 let
 	plot(title = "accurate parametrization in Flatte regime", xlab="m [GeV]", ylab="\$\\mathcal{A}\$")
-	plot!(m->abs2(amplitude(A_approx, m+iϵ)[1]), support...)
+	plot!(m->abs2(amplitude(A, m+iϵ)[1]), support...)
 	vline!([A.T.K.poles[1].M], lab="bare mass", alpha=0.3)
-	vline!([threshold(A.T.channels[2])], lab="threshold")
+	vline!([threshold(A_approx.T.channels[2])], lab="threshold")
 end
 
 # ╔═╡ Cell order:
@@ -124,5 +143,8 @@ end
 # ╠═43482761-ca9a-45bc-86a3-159785c21701
 # ╠═9336b016-0ed3-11f0-2871-0377facf61a3
 # ╠═8916df22-2961-4bd1-87f4-b32fad7473f5
-# ╠═bca30e9e-c23c-40e5-9a2a-15a885ef953e
-# ╠═7e64d6e4-2736-40e7-b7bf-262dfd89996f
+# ╟─17a53e2b-af6e-4bc1-85b3-3bd2f2f27f0b
+# ╠═b119c99d-24d1-4699-9b50-97bc83e2d873
+# ╟─2597c296-3e91-4123-9fbf-fb0581c2e60e
+# ╟─bca30e9e-c23c-40e5-9a2a-15a885ef953e
+# ╟─7e64d6e4-2736-40e7-b7bf-262dfd89996f
