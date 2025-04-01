@@ -24,6 +24,7 @@ end
 # ╔═╡ a27fb311-1a58-4198-b992-fe16b46e7cb8
 md"""
 # Flatte amplitude with subchannel resonances
+(Misha Mikhasenko, RUB, 1/04/2025)
 
 In this notebook we construct two-channel K-matrix with a single pole.
 An accurate construction with a dispersion integral is compared to an approximate formulas using complex mass `m-i\Gamma/2`.
