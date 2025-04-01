@@ -16,7 +16,7 @@ export nominal_threshold
 export QuasiTwoBodyChannel, QuasiTwoBodyChannelBW
 include("quasi-two-body.jl")
 
-export interpolatedChannel
+export InterpolatedChannel
 include("interpolation.jl")
 
 export Kmatrix, amplitude, npoles, nchannels

@@ -45,45 +45,45 @@ where ρ contains the phase space factors for each channel.
 """
 struct Tmatrix{N, V}
     K::Kmatrix{N, V}
-    channels::SVector{N, TwoBodyChannel}
+    channels::SVector{N, <:AbstractChannel}
 end
 
 """
-    Dmatrix(T::Tmatrix, m; ϕ=-π/2)
+    Dmatrix(T::Tmatrix, m)
 
 Calculate the denominator matrix D = 1-iKρ at mass `m`.
 Used in the T-matrix construction T = D⁻¹K.
 """
-function Dmatrix(T::Tmatrix{N, V}, m; ϕ = -π / 2) where {N, V}
+function Dmatrix(T::Tmatrix{N, V}, m) where {N, V}
     𝕀 = Matrix(I, (N, N))
-    iρv = iρ.(T.channels, m; ϕ) .* 𝕀
+    iρv = iρ.(T.channels, m) .* 𝕀
     K = amplitude(T.K, m)
     D = 𝕀 - K * iρv
 end
 
-detD(T::Tmatrix, m; ϕ = -π / 2) = det(Dmatrix(T, m; ϕ))
-amplitude(T::Tmatrix, m; ϕ = -π / 2) = inv(Dmatrix(T, m; ϕ)) * amplitude(T.K, m)
+detD(T::Tmatrix, m) = det(Dmatrix(T, m))
+amplitude(T::Tmatrix, m) = inv(Dmatrix(T, m)) * amplitude(T.K, m)
 npoles(X::Tmatrix{N, V}) where {N, V} = V
 nchannels(X::Tmatrix{N, V}) where {N, V} = N
 channels(X::Tmatrix) = X.channels
 
 """
-    productionpole(T::Tmatrix, m, iR::Int; ϕ=-π/2)
+    productionpole(T::Tmatrix, m, iR::Int)
 
 Calculate the production amplitude contribution from the `iR`-th K-matrix pole.
 Returns the term proportional to gs/(M²-s) where gs are the pole couplings.
 """
-function productionpole(T::Tmatrix, m, iR::Int; ϕ = -π / 2)
+function productionpole(T::Tmatrix, m, iR::Int)
     @unpack M, gs = T.K.poles[iR]
     P = gs ./ (M^2 - m^2)
-    return inv(Dmatrix(T, m; ϕ)) * P
+    return inv(Dmatrix(T, m)) * P
 end
 
 """
-    productionnonpole(T::Tmatrix{N,K}, m; ϕ=-π/2)
+    productionnonpole(T::Tmatrix{N,K}, m)
 
 Calculate the production amplitude contribution from non-pole (constant) terms.
 """
-function productionnonpole(T::Tmatrix{N, K}, m; ϕ = -π / 2) where {N, K}
-    return inv(Dmatrix(T, m; ϕ)) * ones(N)
+function productionnonpole(T::Tmatrix{N, K}, m) where {N, K}
+    return inv(Dmatrix(T, m)) * ones(N)
 end

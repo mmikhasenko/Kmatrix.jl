@@ -1,4 +1,4 @@
-@with_kw struct QuasiTwoBodyChannel{T}
+@with_kw struct QuasiTwoBodyChannel{T} <: AbstractChannel
     m1::Complex{Float64}
     ξ_lineshape::T
     ξ_ch::TwoBodyChannel
