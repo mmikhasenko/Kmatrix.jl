@@ -25,7 +25,7 @@ end
         TwoBodyChannel(2.2, 2.2),
         TwoBodyChannel(1.3, 1.3),
     )
-    MG = [(M = 5.3, gs = [1.2, 0.5, 1.6])]
+    MG = [(M = 5.3, gs = [1.2, 0.48, 1.6])]
     K = Kmatrix(MG)
     T = Tmatrix(K, channels)
 
@@ -37,6 +37,16 @@ end
     A = amplitude(T, m)
     @test size(A) == (3, 3)
     @test A ≈ transpose(A) # Check hermiticity
+    # 
+    @test isapprox(
+        amplitude(T, 5.0),
+        [
+            0.198372+0.230421im   0.0793488+0.0921683im  0.264496+0.307228im
+            0.0793488+0.0921683im  0.0317395+0.0368673im  0.105798+0.122891im
+            0.264496+0.307228im    0.105798+0.122891im   0.352662+0.409637im
+        ],
+        atol = 1e-6,
+    )
 end
 
 @testset "2x2 two-pole K-matrix" begin
