@@ -23,9 +23,9 @@ theme(:boxed, fontfamily="Computer Modern")
 
 # ╔═╡ b742b299-71fc-4262-ab64-2f27b02a365c
 begin
-	const m_D2600 = 2.6
-	const Γ_D2600 = 0.1
-	const mD = 1.86
+	const m_D2600 = 2.627
+	const Γ_D2600 = 0.141
+	const mD = 1.869
 	const mπ = 0.14
 end;
 

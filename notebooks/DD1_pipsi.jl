@@ -54,15 +54,15 @@ theme(:boxed, fontfamily="Computer Modern")
 
 # ╔═╡ 0e9bd099-cd96-4991-8b98-7859925540e3
 begin
-	const m_D2600 = 2.6
-	const Γ_D2600 = 0.14
-	const mD = 1.86
+	const m_D2600 = 2.672
+	const Γ_D2600 = 0.141
+	const mD = 1.869
 	const mπ = 0.14
-	const mjψ = 3.09
+	const mψ = 3.686
 end;
 
 # ╔═╡ a5128948-0272-4e1b-a553-4cfa66a91125
-const support = (mjψ+mπ, 5.5)
+const support = (mψ+mπ, 5.5)
 
 # ╔═╡ 43482761-ca9a-45bc-86a3-159785c21701
 const iϵ = 1e-7im
@@ -70,7 +70,7 @@ const iϵ = 1e-7im
 # ╔═╡ 9336b016-0ed3-11f0-2871-0377facf61a3
 A_approx = let
 	channels = SVector(
-        TwoBodyChannel(mjψ, mπ),
+        TwoBodyChannel(mψ, mπ),
         TwoBodyChannel(mD, m_D2600-1im*Γ_D2600/2)
     )
     MG = [(M = 4.2, gs = [0.5, 4.4])]
@@ -91,7 +91,7 @@ A = let
 			n_grid = 200);
 	#
 	channels = SVector(
-        TwoBodyChannel(mjψ, mπ),
+        TwoBodyChannel(mψ, mπ),
         ch_qtb_approx
     )
 	ρ_ratio = channels[2].inter.coefs[end]
@@ -107,9 +107,22 @@ md"""
 """
 
 # ╔═╡ b119c99d-24d1-4699-9b50-97bc83e2d873
-let # in three columns
+rho_on_grid = let # in three columns
 	mv = range(support..., 100)
-	Av = iρ.(Ref(A_approx.T.channels[2]), mv)
+	Av = iρ.(Ref(A.T.channels[2]), mv .+ 1e-7im)
+	(; mv, Av)
+end;
+
+# ╔═╡ d56e7e13-4c78-44f8-af08-ef39d19b646b
+begin
+	plot()
+	plot!(rho_on_grid.mv, rho_on_grid.Av .|> real)
+	plot!(rho_on_grid.mv, rho_on_grid.Av .|> imag)
+end
+
+# ╔═╡ cb6873b2-ccaa-4067-b955-43085ad9021e
+let
+	@unpack mv, Av = rho_on_grid
 	data = [mv real.(Av) imag.(Av)]
 	writedlm("D1D_orho_reim.txt", data)
 end
@@ -146,6 +159,8 @@ end
 # ╠═8916df22-2961-4bd1-87f4-b32fad7473f5
 # ╟─17a53e2b-af6e-4bc1-85b3-3bd2f2f27f0b
 # ╠═b119c99d-24d1-4699-9b50-97bc83e2d873
+# ╠═d56e7e13-4c78-44f8-af08-ef39d19b646b
+# ╠═cb6873b2-ccaa-4067-b955-43085ad9021e
 # ╟─2597c296-3e91-4123-9fbf-fb0581c2e60e
 # ╟─bca30e9e-c23c-40e5-9a2a-15a885ef953e
 # ╟─7e64d6e4-2736-40e7-b7bf-262dfd89996f
