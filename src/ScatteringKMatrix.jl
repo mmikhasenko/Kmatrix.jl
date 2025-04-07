@@ -1,4 +1,4 @@
-module KMatrix
+module ScatteringKMatrix
 
 using HadronicLineshapes
 using Interpolations
@@ -19,12 +19,12 @@ include("quasi-two-body.jl")
 export InterpolatedChannel
 include("interpolation.jl")
 
-export Kmatrix, amplitude, npoles, nchannels
-export Tmatrix, Dmatrix, detD, channels
+export KMatrix, amplitude, npoles, nchannels
+export TMatrix, DMatrix, detD, channels
 include("t-matrix.jl")
 
 export ProductionAmplitude
 export production_pole, production_nonpole
 include("production-amplitude.jl")
 
-end # module KMatrix
+end # module ScatteringKMatrix

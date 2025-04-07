@@ -1,5 +1,6 @@
 ### A Pluto.jl notebook ###
 # v0.20.4
+# cspell: disable
 
 using Markdown
 using InteractiveUtils
@@ -388,7 +389,7 @@ Let's setup couplings for three channels, that we can adjust:
 # ╔═╡ fb45f5a8-15c4-4695-b36b-f21aab1e3d80
 begin
     struct ProductionAmplitude{N, V}
-        T::Tmatrix{N, V}
+        T::TMatrix{N, V}
         αpoles::SVector{V, <:Number}
         αnonpoles::SVector{N, <:Number}
     end
@@ -398,7 +399,7 @@ begin
     detD(X::ProductionAmplitude, m; ϕ = -π / 2) = detD(X.T, m; ϕ)
     channels(X::ProductionAmplitude) = channels(X.T)
     # 
-    ProductionAmplitude(T::Tmatrix{N, V}) where {N, V} =
+    ProductionAmplitude(T::TMatrix{N, V}) where {N, V} =
         ProductionAmplitude(T, SVector{V}(ones(V)), SVector{N}(ones(N)))
     # 
     function amplitude(A::ProductionAmplitude, m; ϕ = -π / 2)
@@ -415,23 +416,23 @@ end
 
 # ╔═╡ 1072afe6-bad7-4de3-9ad2-6dcef2b924bb
 begin
-    struct Tmatrix{N, V}
+    struct TMatrix{N, V}
         K::Kmatrix{N, V}
         channels::SVector{N, TwoBodyChannel}
     end
     #	
-    function Dmatrix(T::Tmatrix{N, V}, m; ϕ = -π / 2) where {N, V}
+    function Dmatrix(T::TMatrix{N, V}, m; ϕ = -π / 2) where {N, V}
         𝕀 = Matrix(I, (N, N))
         iρv = 1im .* ρ.(T.channels, m; ϕ) .* 𝕀
         K = amplitude(T.K, m)
         D = 𝕀 - K * iρv
     end
-    detD(T::Tmatrix, m; ϕ = -π / 2) = det(Dmatrix(T, m; ϕ))
-    amplitude(T::Tmatrix, m; ϕ = -π / 2) = inv(Dmatrix(T, m; ϕ)) * amplitude(T.K, m)
+    detD(T::TMatrix, m; ϕ = -π / 2) = det(Dmatrix(T, m; ϕ))
+    amplitude(T::TMatrix, m; ϕ = -π / 2) = inv(Dmatrix(T, m; ϕ)) * amplitude(T.K, m)
     # 
-    npoles(X::Tmatrix{N, V}) where {N, V} = V
-    nchannels(X::Tmatrix{N, V}) where {N, V} = N
-    channels(X::Tmatrix) = X.channels
+    npoles(X::TMatrix{N, V}) where {N, V} = V
+    nchannels(X::TMatrix{N, V}) where {N, V} = N
+    channels(X::TMatrix) = X.channels
 end
 
 # ╔═╡ 0ff7e560-37ca-4016-bc01-741322402679
@@ -445,7 +446,7 @@ T1 = let
     MG = [(M, gs = [g1_T1, g2_T1, g3_T1])]
     # 
     K = Kmatrix(MG)
-    T = Tmatrix(K, channels)
+    T = TMatrix(K, channels)
 end;
 
 # ╔═╡ ce2c280e-6a55-4766-a0f9-941b448c41c9
@@ -459,7 +460,7 @@ begin
 end
 
 # ╔═╡ 9a2e8210-c140-4689-bb16-2aab3c3b2aaa
-productionnonpole(T::Tmatrix{N, K}, m; ϕ = -π / 2) where {N, K} =
+productionnonpole(T::TMatrix{N, K}, m; ϕ = -π / 2) where {N, K} =
     inv(Dmatrix(T, m; ϕ)) * ones(N)
 #
 
@@ -477,11 +478,11 @@ T2 = let
         (M = 6.3, gs = [h1_T2, h2_T2])]
     # 
     K = Kmatrix(MG)
-    T = Tmatrix(K, channels)
+    T = TMatrix(K, channels)
 end;
 
 # ╔═╡ ebf8b842-99ce-40e8-9bf4-931471879bf9
-function productionpole(T::Tmatrix, m, iR::Int; ϕ = -π / 2)
+function productionpole(T::TMatrix, m, iR::Int; ϕ = -π / 2)
     @unpack M, gs = T.K.poles[iR]
     P = gs ./ (M^2 - m^2)
     return inv(Dmatrix(T, m; ϕ)) * P
@@ -532,7 +533,7 @@ $T = [1-iK\rho ]^{-1} K$
 If K is zero for $s=s_\text{z}$, T is zero.
 """
 
-# ╔═╡ 53ad2e4e-0268-4488-9891-815922d8a8db
+# ╔═╡ 53ad2e4-0268-4488-9891-815922d8a8db
 aside(Markdown.MD(Markdown.Admonition("warning", "Tip", [md"For explanation let's have a look at K-matrix in these case."])))
 
 # ╔═╡ a7a68629-bf6f-435e-9a97-de9a02a31160
@@ -566,7 +567,7 @@ T3 = let
         (M = 6.3, gs = [2.5])]
     # 
     K = Kmatrix(MG)
-    T = Tmatrix(K, channels)
+    T = TMatrix(K, channels)
 end;
 
 # ╔═╡ 8556c8f4-89e4-4544-ad73-4da8b43a7051
@@ -626,7 +627,7 @@ function productionnonpole(A::ProductionAmplitude{N, V}, m; ϕ = -π / 2) where 
     αpoles = SVector{V}(zeros(V))
     A = ProductionAmplitude(T, αpoles, αnonpoles)
     return amplitude(A, m; ϕ)
-en
+end
 
 # ╔═╡ 2486eb34-a858-4ea9-99e1-f17627589461
 RobustLocalResource("", joinpath("..", "figures", "2x2_scattering.png"))
@@ -739,7 +740,7 @@ end
 # ╠═74e06991-79a2-4711-8bc7-c8656249641f
 # ╠═3fde6651-a704-4757-b282-3a7cfcd36f6e
 # ╠═8b92df7f-d97b-43fa-8ac3-fed8ee974f5f
-# ╠═53ad2e4e-0268-4488-9891-815922d8a8db
+# ╠═53ad2e4-0268-4488-9891-815922d8a8db
 # ╠═a7a68629-bf6f-435e-9a97-de9a02a31160
 # ╠═babfbc1f-7beb-44d1-b3c8-75309e8b817c
 # ╠═2aef1bd5-7a81-417b-a090-77644fc5f640

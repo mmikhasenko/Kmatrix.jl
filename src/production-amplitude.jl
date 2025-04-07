@@ -4,7 +4,7 @@
 Production amplitude representation for N channels and V poles.
 
 # Fields
-- `T::Tmatrix{N,V}`: Underlying T-matrix description
+- `T::TMatrix{N,V}`: Underlying T-matrix description
 - `αpoles::SVector{V}`: Production couplings to each K-matrix pole
 - `αnonpoles::SVector{N}`: Direct production couplings to each channel
 
@@ -15,7 +15,7 @@ A = [1-iKρ]^{-1}P
 where P contains both pole and non-pole production terms.
 """
 struct ProductionAmplitude{N, V}
-    T::Tmatrix{N, V}
+    T::TMatrix{N, V}
     αpoles::SVector{V, <:Number}
     αnonpoles::SVector{N, <:Number}
 end
@@ -25,7 +25,7 @@ nchannels(X::ProductionAmplitude{N, V}) where {N, V} = N
 detD(X::ProductionAmplitude, m) = detD(X.T, m)
 channels(X::ProductionAmplitude) = channels(X.T)
 
-ProductionAmplitude(T::Tmatrix{N, V}) where {N, V} =
+ProductionAmplitude(T::TMatrix{N, V}) where {N, V} =
     ProductionAmplitude(T, SVector{V}(ones(V)), SVector{N}(ones(N)))
 
 """
@@ -41,7 +41,7 @@ function amplitude(A::ProductionAmplitude, m)
         M, gs = Mgs.M, Mgs.gs
         P += α .* gs ./ (M^2 - m^2)
     end
-    D⁻¹ = inv(Dmatrix(T, m))
+    D⁻¹ = inv(DMatrix(T, m))
     return D⁻¹ * P
 end
 

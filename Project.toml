@@ -1,4 +1,4 @@
-name = "KMatrix"
+name = "ScatteringKMatrix"
 uuid = "dbb8acb7-2292-4e86-9e45-2a3a36745847"
 authors = ["Mikhail Mikhasenko <mikhail.mikhasenko@cern.ch>"]
 version = "0.1.0"

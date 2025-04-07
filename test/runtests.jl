@@ -1,6 +1,6 @@
-using KMatrix
+using ScatteringKMatrix
 using Test
-using KMatrix.StaticArrays
+using ScatteringKMatrix.StaticArrays
 
 
 @testset "TwoBodyChannel" begin
@@ -26,8 +26,8 @@ end
         TwoBodyChannel(1.3, 1.3),
     )
     MG = [(M = 5.3, gs = [1.2, 0.48, 1.6])]
-    K = Kmatrix(MG)
-    T = Tmatrix(K, channels)
+    K = KMatrix(MG)
+    T = TMatrix(K, channels)
 
     @test nchannels(T) == 3
     @test npoles(T) == 1
@@ -58,8 +58,8 @@ end
         (M = 4.3, gs = [2.1, 0.0]),
         (M = 6.3, gs = [0.0, 2.5]),
     ]
-    K = Kmatrix(MG)
-    T = Tmatrix(K, channels)
+    K = KMatrix(MG)
+    T = TMatrix(K, channels)
 
     @test nchannels(T) == 2
     @test npoles(T) == 2
@@ -77,8 +77,8 @@ end
         (M = 4.3, gs = [2.1]),
         (M = 6.3, gs = [2.5]),
     ]
-    K = Kmatrix(MG)
-    T = Tmatrix(K, channels)
+    K = KMatrix(MG)
+    T = TMatrix(K, channels)
 
     # Test with default production couplings
     A = ProductionAmplitude(T)

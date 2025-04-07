@@ -1,4 +1,4 @@
-# KMatrix.jl
+# ScatteringKMatrix.jl
 
 A Julia package for K-matrix formalism in scattering theory.
 
@@ -8,7 +8,7 @@ To install the package, start Julia REPL and run:
 
 ```julia
 using Pkg
-Pkg.add(url="https://github.com/mmikhasenko/KMatrix.jl")
+Pkg.add(url="https://github.com/mmikhasenko/ScatteringKMatrix.jl")
 ```
 
 ## Testing
