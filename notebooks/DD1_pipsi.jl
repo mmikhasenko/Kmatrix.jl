@@ -9,15 +9,16 @@ using InteractiveUtils
 begin
     using Pkg
     Pkg.activate(joinpath(@__DIR__))
+    Pkg.develop(path = joinpath(@__DIR__, ".."))
     Pkg.instantiate()
     # 
-    using KMatrix.HadronicLineshapes
-    using KMatrix.StaticArrays
-    using KMatrix.Parameters
-    using KMatrix.QuadGK
+    using ScatteringKMatrix.HadronicLineshapes
+    using ScatteringKMatrix.StaticArrays
+    using ScatteringKMatrix.Parameters
+    using ScatteringKMatrix.QuadGK
     using Interpolations
     using DelimitedFiles
-    using KMatrix
+    using ScatteringKMatrix
     using Plots
 end
 
@@ -74,7 +75,7 @@ A_approx = let
         TwoBodyChannel(mD, m_D2600 - 1im * Γ_D2600 / 2),
     )
     MG = [(M = 4.2, gs = [0.5, 4.4])]
-    K = Kmatrix(MG)
+    K = KMatrix(MG)
     T = TMatrix(K, channels)
     ProductionAmplitude(T, SVector(1.0), SVector(0.0, 0.0))
 end
@@ -96,7 +97,7 @@ A = let
     )
     ρ_ratio = channels[2].inter.coefs[end]
     MG = [(M = A_approx.T.K.poles[1].M, gs = A_approx.T.K.poles[1].gs .* [1, 1 / sqrt(ρ_ratio)])]
-    K = Kmatrix(MG)
+    K = KMatrix(MG)
     T = TMatrix(K, channels)
     ProductionAmplitude(T, SVector(1.0), SVector(0.0, 0.0))
 end
