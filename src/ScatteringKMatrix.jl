@@ -14,7 +14,7 @@ include("two-body-channel.jl")
 export real_ρ
 export nominal_threshold
 export QuasiTwoBodyChannel, QuasiTwoBodyChannelBW
-include("quasi-two-body.jl")
+include("quasi-two-body-channel.jl")
 
 export InterpolatedChannel
 include("interpolation.jl")

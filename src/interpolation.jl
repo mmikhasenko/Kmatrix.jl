@@ -21,21 +21,23 @@ function real_ρ(ch::InterpolatedChannel, m::Real)
     imag(iρ(ch.approximate, m)) * scale
 end
 
+function once_subtracted_dispersion_relation(f_of_s, s::Complex, s_thr::Real)
+    quadgk(s_thr, Inf) do s′
+        f_of_s(s) / (s′ * (s′ - s))
+    end[1] * s / π
+end
+
 # subtracted at zero 
 function _iρ(ch::InterpolatedChannel, m::Complex)
-    thr = threshold(ch.full)
-    s = m^2
-    quadgk(thr^2, Inf) do s′
-        m′ = sqrt(s′)
-        real_ρ(ch, m′) / (s′ * (s′ - s))
-    end[1] * s / π
+    m_thr = threshold(ch.full)
+    N(s) = real_ρ(ch, sqrt(s))
+    return once_subtracted_dispersion_relation(N, m^2, m_thr^2)
 end
 
 # subtraction point is adjusted
 function iρ(
     ch::InterpolatedChannel{<:QuasiTwoBodyChannelBW}, m::Complex)
     ml = nominal_threshold(ch.full)
-    f = ch.inter(ml)
     _iρ0 = real(_iρ(ch, ml + 1e-7im))
-    _iρ(ch, m) - _iρ0
+    return _iρ(ch, m) - _iρ0
 end
