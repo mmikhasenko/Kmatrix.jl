@@ -23,7 +23,7 @@ end
 
 function once_subtracted_dispersion_relation(f_of_s, s::Complex, s_thr::Real)
     quadgk(s_thr, Inf) do s′
-        f_of_s(s) / (s′ * (s′ - s))
+        f_of_s(s′) / (s′ * (s′ - s))
     end[1] * s / π
 end
 
