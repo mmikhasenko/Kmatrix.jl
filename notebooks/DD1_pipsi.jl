@@ -33,16 +33,16 @@ An accurate construction with a dispersion integral is compared to an approximat
 
 ## Main findings
 
-We find that while shapes match well for resonance above both threshold, the shapes devitate in the Flatte regime. It's clear that an approximate expression does not give a good approximation for the phase space below the threshold. It biases the width of the resulting state, since
+We find that while shapes match well for resonance above both threshold, the shapes deviate in the Flatte regime. It's clear that an approximate expression does not give a good approximation for the phase space below the threshold. It biases the width of the resulting state, since
 
 $\Gamma \approx \frac{1}{m} (g_1^2\rho_1 + g_2^2 \rho_2)$
 
 So the width does not come the same in two settings for the Flatte regime.
 
-## Nontheless
+## Nonetheless
 
 When dealing with a single channel, the bias in the width can well be compensated by the contribution of the channel with the lower threshold ($g_1^2 \rho_1$).
-It seems to me that appriximate construction would span a similar class of curves, but might get biased values of the poles and residues. I'd still guess that one can start fitting with the approximate approach to get a feeling if data are sensitive to the second channel, and move to the advanced, accurate parametrization to quantify the outcomes.
+It seems to me that approximate construction would span a similar class of curves, but might get biased values of the poles and residues. I'd still guess that one can start fitting with the approximate approach to get a feeling if data are sensitive to the second channel, and move to the advanced, accurate parametrization to quantify the outcomes.
 
 ## Technical
 
@@ -125,7 +125,7 @@ end
 let
     @unpack mv, Av = rho_on_grid
     data = [mv real.(Av) imag.(Av)]
-    writedlm("D1D_orho_reim.txt", data)
+    writedlm("D1D_irho_reim.txt", data)
 end
 
 # ╔═╡ 2597c296-3e91-4123-9fbf-fb0581c2e60e
