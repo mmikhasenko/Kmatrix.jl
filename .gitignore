@@ -3,3 +3,6 @@ notebooks/anim_fps15.gif
 notebooks/D1D_orho_reim.txt
 notebooks/width_limit.gif
 notebooks/example.jl
+
+anim_*.gif
+*_reim.txt
