@@ -81,9 +81,9 @@ end
     T = TMatrix(K, channels)
 
     # Test with default production couplings
-    A = ProductionAmplitude(T)
-    @test length(A.αpoles) == 2
-    @test all(A.αpoles .== 1)
+    A = ProductionAmplitude(T, [1.2, 2.2])
+    @test length(A.α_poles) == 2
+    @test all(A.α_poles .== [1.2, 2.2])
 
     # Test with custom production couplings
     α = SVector(1.0, 2.0 * cis(π / 4))

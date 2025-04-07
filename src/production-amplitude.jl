@@ -5,8 +5,8 @@ Production amplitude representation for N channels and V poles.
 
 # Fields
 - `T::TMatrix{N,V}`: Underlying T-matrix description
-- `αpoles::SVector{V}`: Production couplings to each K-matrix pole
-- `αnonpoles::SVector{N}`: Direct production couplings to each channel
+- `α_poles::SVector{V}`: Production couplings to each K-matrix pole
+- `α_nonpoles::SVector{N}`: Direct production couplings to each channel
 
 The production amplitude is calculated as:
 ```math
@@ -16,8 +16,8 @@ where P contains both pole and non-pole production terms.
 """
 struct ProductionAmplitude{N, V}
     T::TMatrix{N, V}
-    αpoles::SVector{V, <:Number}
-    αnonpoles::SVector{N, <:Number}
+    α_poles::SVector{V, <:Number}
+    α_nonpoles::SVector{N, <:Number}
 end
 
 npoles(X::ProductionAmplitude{N, V}) where {N, V} = V
@@ -25,8 +25,8 @@ nchannels(X::ProductionAmplitude{N, V}) where {N, V} = N
 detD(X::ProductionAmplitude, m) = detD(X.T, m)
 channels(X::ProductionAmplitude) = channels(X.T)
 
-ProductionAmplitude(T::TMatrix{N, V}) where {N, V} =
-    ProductionAmplitude(T, SVector{V}(ones(V)), SVector{N}(ones(N)))
+ProductionAmplitude(T::TMatrix{N, V}, α_poles, α_nonpoles = zeros(N)) where {N, V} =
+    ProductionAmplitude(T, SVector{V}(α_poles), SVector{N}(α_nonpoles))
 
 """
     amplitude(A::ProductionAmplitude, m)
@@ -35,9 +35,9 @@ Calculate the full production amplitude at mass `m`.
 Includes contributions from both pole and non-pole terms.
 """
 function amplitude(A::ProductionAmplitude, m)
-    T, αpoles, αnonpoles = A.T, A.αpoles, A.αnonpoles
-    P = αnonpoles
-    for (α, Mgs) in zip(αpoles, A.T.K.poles)
+    T, α_poles, α_nonpoles = A.T, A.α_poles, A.α_nonpoles
+    P = α_nonpoles
+    for (α, Mgs) in zip(α_poles, A.T.K.poles)
         M, gs = Mgs.M, Mgs.gs
         P += α .* gs ./ (M^2 - m^2)
     end
@@ -52,10 +52,10 @@ Calculate production amplitude contribution from only the `iR`-th pole.
 Useful for studying individual resonance contributions.
 """
 function production_pole(A::ProductionAmplitude{N, V}, m, iR::Int) where {N, V}
-    αnonpoles = SVector{N}(zeros(N))
-    αpoles = zeros(Complex{Float64}, V)
-    αpoles[iR] = A.αpoles[iR]
-    A = ProductionAmplitude(A.T, SVector{V}(αpoles), αnonpoles)
+    α_nonpoles = SVector{N}(zeros(N))
+    α_poles = zeros(Complex{Float64}, V)
+    α_poles[iR] = A.α_poles[iR]
+    A = ProductionAmplitude(A.T, SVector{V}(α_poles), α_nonpoles)
     return amplitude(A, m)
 end
 
@@ -65,8 +65,8 @@ end
 Calculate production amplitude contribution from only non-pole terms.
 """
 function production_nonpole(A::ProductionAmplitude{N, V}, m) where {N, V}
-    @unpack T, αnonpoles = A
-    αpoles = SVector{V}(zeros(V))
-    A = ProductionAmplitude(T, αpoles, αnonpoles)
+    @unpack T, α_nonpoles = A
+    α_poles = SVector{V}(zeros(V))
+    A = ProductionAmplitude(T, α_poles, α_nonpoles)
     return amplitude(A, m)
 end
